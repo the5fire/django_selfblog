@@ -1,0 +1,11 @@
+*.pyc
+.idea
+.scrapy
+run
+build
+atlassian-ide-plugin.xml
+.project
+.pydevproject
+.env
+*.log
+*.sqlite3

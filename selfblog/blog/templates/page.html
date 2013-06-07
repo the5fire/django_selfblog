@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load duoshuo_tags substring %}
+{% block title %}{{ page.title }} | {% endblock %}
+{% block desc %}{{ page.content|truncatewords:140 }}{%  endblock %}
+{% block keywords %}{% for tag in page.tags_list %}{{ tag }},{% endfor %}{% endblock %}
+{% block main %}
+<div class="detail">
+    <h2>
+        <span>{{ page.title }}</span>
+    </h2>
+
+    <div class="info">
+        作者：{{ page.author }} 
+        | 发布：{{ page.create_time|date:"Y-m-d P" }}
+    </div>
+    
+    <div class="clear"></div>
+
+    <div class="content">
+        {% autoescape off %}
+        {{ page.content_html }}
+        {% endautoescape %}
+    </div>
+
+    {% duoshuo_comments %}
+</div>
+{% endblock %}

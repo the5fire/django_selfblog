@@ -1,0 +1,26 @@
+{% extends "admin/change_form.html" %}
+
+{% block after_related_objects %}
+  {% if original.pk %}
+    <div class="submit-row">
+      <p class="deletelink-box">Manage this request</p>
+      {% if original.requested %}
+        <input type="submit" value="Approve" name="approve">
+        <input type="submit" value="Deny" name="deny">
+      {% endif %}
+      {% if original.submitted %}
+        <input type="submit" value="Accept" name="accept">
+        <input type="submit" value="Return" name="return">
+      {% endif %}
+      {% if original.submitted or original.assigned %}
+        <input type="submit" value="Cancel" name="cancel">
+      {% endif %}
+      {% if original.accepted %}
+        <input type="submit" value="Complete" name="complete">
+      {% endif %}
+      {% if original.cancelled %}
+        <input type="submit" value="Reopen" name="reopen">
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}

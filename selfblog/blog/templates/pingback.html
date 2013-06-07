@@ -1,0 +1,14 @@
+{% load i18n pingback_tags %}
+{% load pingback_tags %}
+{% get_pingback_list for object as pingbacks %}
+{% get_pingback_count for object as pingback_count %}
+{% if pingbacks %}
+<h3>{{ pingback_count }} Pingbacks</h3>
+<div class="b-pingback">
+    {% for pingback in pingbacks %}
+    <li class="b-meta">
+    <a href="{{ pingback.get_absolute_url }}"></a>{{ pingback.date|date:"M d, Y" }}: <a name="pingback-{{ pingback.id }}" href="{{ pingback.url }}" class="b-permlink">{{ pingback.title }}</a>
+    </li>
+    {% endfor %}
+</div>
+{% endif %}

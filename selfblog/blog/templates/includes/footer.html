@@ -1,0 +1,23 @@
+<footer class="footer">
+<div class="container">
+    <p>版权所有 © 2010-2013 the5fire.com </p>
+    <p>CC BY-NC-SA 3.0</p>
+    <p>
+    Powered by <a href="http://www.djangoproject.com" target="_blank">Django</a>. 
+    Host on <a href="http://www.webfaction.com?affiliate=the5fire" target="_blank">WebFaction</a>.
+    </p>
+    <p>
+    当前{{ online_num }}人在线,表示毫无压力
+    {% if online_num > 50 %}
+    <strong>囧~</strong>
+    {% endif %}
+    {% if online_num < 10 %}
+    <strong>汗~</strong>
+    {% endif %}
+    </p>
+    <p>本页面加载耗时:<!!LOAD_TIMES!!>s</p>
+    <p>
+        <a href="/sitemap.xml">网站地图</a>
+    </p>    
+</div>
+</footer>

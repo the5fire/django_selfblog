@@ -1,0 +1,12 @@
+Django==1.5.1
+-e git+https://github.com/duoshuo/duoshuo-python-sdk.git#egg=duoshuo-python-sdk
+django-pingback
+django-xmlrpc==0.1.4
+gunicorn
+BeautifulSoup
+supervisor
+Docutils
+Pygments
+mysql-python
+python-memecached
+django-debug-toolbar

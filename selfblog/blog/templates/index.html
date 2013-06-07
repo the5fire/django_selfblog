@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load substring %}
+
+{% if title %}
+    {% block title %}{{ title }} {% endblock %}
+{% endif %}
+
+{% block main %}
+    {% with post_list=posts.object_list %}
+    {% if post_list %}
+    {% for post in post_list %}
+        <div class="article">
+            <h2 class='under_line'>
+                <a href="{{ post.get_absolute_url }}" rel="bookmark" title="详细阅读 {{ post.title }}">
+                    {% autoescape off %}{{ post.title }}{% endautoescape %}
+                </a>
+            </h2>
+            <div class="info">
+                作者：the5fire
+                | 分类：<a href="/category/{{ post.category.alias }}" title="查看 post.category.name 中的全部文章" rel="category tag">{{ post.category.name }}</a> 
+                | 标签： 
+                {% for tag in post.tags_list %}
+                <a href="/tag/{{ tag }}" rel="tag">{{ tag.strip }}</a>&nbsp;
+                {% endfor %}
+                | 阅读 {{ post.view_times }}  次 
+                | 发布：{{ post.pub_time|date:"Y-m-d P" }}
+                {% if user.is_authenticated %}
+                    <a href="/admin/blog/post/{{post.id}}/" target="_blank">edit</a>
+                {% endif %}
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="entry_post">
+                <span>
+                    <p>
+                    {% autoescape on %}
+                    {{ post.summary|truncatewords:140 }}
+                    {% endautoescape %}
+                    </p>
+                </span>
+                <span class="pull-right"><a href="{{ post.get_absolute_url }}" title="{{ post.title }}" rel="bookmark">阅读全文</a></span>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+        <hr/>
+        <div class="pagination pagination-centered pagination-small">
+            <ul>
+                {% if posts.number <= 1 %}
+                    <li class="disabled"><a>上一页</a></li>
+                {% else %}
+                    {% if query %}
+                    <li><a href="?s={{ query }}&page={{ posts.number|add:-1 }}">上一页</a></li>
+                    {% else %}
+                    <li><a href="?page={{ posts.number|add:-1 }}">上一页</a></li>
+                    {% endif %}
+                    {% for i in 'abcde'|make_list %}
+                        {% if posts.number|sub:forloop.revcounter > 0 %}
+                            {% if query %}
+                        <li><a href="?s={{ query }}&page={{ posts.number|sub:forloop.revcounter }}">{{ posts.number|sub:forloop.revcounter }}</a></li>
+                            {% else %}
+                        <li><a href="?page={{ posts.number|sub:forloop.revcounter }}">{{ posts.number|sub:forloop.revcounter }}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <li class="active"><a>{{ posts.number }}</a></li>
+
+                {% if posts.number < posts.paginator.num_pages %}
+                    {% for i in 'abcde'|make_list %}
+                        {% if posts.number|add:forloop.counter < posts.paginator.num_pages %}
+                            {% if query %}
+                            <li><a href="?s={{ query }}&page={{ posts.number|add:forloop.counter }}">{{ posts.number|add:forloop.counter }}</a></li>
+                            {% else %}
+                            <li><a href="?page={{ posts.number|add:forloop.counter }}">{{ posts.number|add:forloop.counter }}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if query %}
+                    <li><a href="?s={{ query }}&page={{ posts.number|add:1 }}">下一页</a></li>
+                    {% else %}
+                    <li><a href="?page={{ posts.number|add:1 }}">下一页</a></li>
+                    {% endif %}
+                {% else %}
+                    <li class="disabled"><a>下一页</a></li>
+                {% endif %}
+            </ul>
+        </div>
+{% endblock %}

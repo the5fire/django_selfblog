@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}{% endblock %}the5fire的技术博客</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="{% block desc %}关于编程（java,python,js等）、设计模式、系统（linux）、开源、学习心得、工作经验–人生苦短，我用python{% endblock %}">
+        <meta name="keywords" content="{% block keywords %}python,linux,vim,web开发,工作经验,项目实战,教程{% endblock %}">
+        <meta name="author" content="the5fire">
+        <meta name="baidu-site-verification" content="L1tGNksWV2rt8zho" />
+        <meta name="google-site-verification" content="DBmuxv3lJezFBdzrzoueLXVbY6gJ6cdbR1mroGVRiNQ" />
+        <link rel="pingback" href="/xmlrpc/" />
+        <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+
+        <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/static/bootstrap/css/docs.css" rel="stylesheet">
+        <link href="/static/blog/css/style.css" rel="stylesheet">
+        {%  block extend_style %}{% endblock %}
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li class="">
+                                <a href="/">首页</a>
+                            </li>
+                                {% for page in pages %}
+                            <li class="">
+                                {% if page.link %}
+                                <a href="{{ page.link }}">{{ page.title }}</a>
+                                {% else %}
+                                <a href="/{{ page.alias }}/">{{ page.title }}</a>
+                                {% endif %}
+                            </li>
+                                {% endfor %}
+                        </ul>
+                    </div>
+                    <a class="brand" href="/">the5fire</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" id="content">
+            <header class="" id="overview">
+            <div class="row">
+                <div class="span9">
+                    <h1><a href="/">the5fire的技术博客</a></h1>
+                    <div id="blogdesc">关注python、vim、linux、web开发和互联网--life is short, we need python.</div>
+                </div>
+
+                <div class="span3">
+                    <div id="search_box">
+                        <form class="form-search" method="get" action="/">
+                            <input type="text" class="input-medium search-query" value="" name="s" id="s">
+                            <button type="submit" class="btn">搜索</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </header>
+
+            <div class="subnav under_line">
+                <ul class="nav nav-pills">
+                    {% for category in categories %}
+                    {% if category.is_nav %}
+                    <li><a href="/category/{{ category.alias }}/">{{ category.name }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <div class="row">
+                <div id="main" class="span9">
+                    {% block main %}{% endblock %}
+                </div>
+
+                <div class="sidebar span3">
+                    {% include "includes/sidebar.html" %}
+                </div>
+            </div>
+
+            <div class="">
+                其他分类：
+                <ul class="nav nav-pills">
+                    {% for category in categories %}
+                    {% if not category.is_nav %}
+                    <li><a href="/category/{{ category.alias }}/">{{ category.name }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
+
+        {% include "includes/footer.html" %}
+    </body>
+</html>
