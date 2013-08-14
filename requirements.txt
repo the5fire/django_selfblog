@@ -8,5 +8,5 @@ supervisor
 Docutils
 Pygments
 mysql-python
-python-memecached
+python-memcached
 django-debug-toolbar
