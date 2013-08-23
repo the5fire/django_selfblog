@@ -39,7 +39,7 @@ the5fire的技术博客源码
 
     cd www
     # 激活虚拟环境
-    source bin/active
+    source bin/activate
     # 安装依赖包
     pip install -r requirements.txt
 
