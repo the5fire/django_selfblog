@@ -165,7 +165,7 @@ class PostDetailView(BaseMixin, DetailView):
         context['next_post'] = next_post
         context['prev_post'] = prev_post
 
-        context['lru_views'] = cache.get('lru_views').items()
+        context['lru_views'] = cache.get('lru_views', {}).items()
         context['cur_user_ip'] = self.cur_user_ip
 
         context['related_posts'] = post.related_posts
