@@ -23,7 +23,7 @@ class BaseMixin(object):
             context['recently_posts'] = Post.get_recently_posts(RECENTLY_NUM)
             context['hot_posts'] = Post.get_hots_posts(HOT_NUM)
             context['pages'] = Page.objects.filter(status=0)
-            context['online_num'] = len(cache.get('online_ips'))
+            context['online_num'] = len(cache.get('online_ips', []))
         except Exception as e:
             logger.exception(u'加载基本信息出错[%s]！', e)
 
