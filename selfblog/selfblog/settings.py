@@ -18,7 +18,7 @@ ALLOWED_HOSTS = ['localhost', '.the5fire.com']
 MANAGERS = ADMINS
 
 if DEBUG:
-    DOMAIN = 'http://localhost'
+    DOMAIN = 'http://localhost:8000'
     DB_NAME = 'selfblog.sqlite3'
     DB_USER = 'root'
     DB_PWD = 'root'
