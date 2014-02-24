@@ -1,0 +1,16 @@
+---
+- hosts: local  # hosts中指定
+  remote_user: the5fire  # 如果和当前用户一样，则无需指定
+  tasks:
+    - name: check out django_blog
+      git: dest=~/demos/django_selfblog repo=https://github.com/the5fire/django_selfblog
+           update=yes
+    - name: make virtualenv
+      shell: 'virtualenv ~/demos'
+    - name: install requirements
+      pip: requirements=~/demos/django_selfblog/requirements.txt 
+           virtualenv=~/demos
+    - name: init database
+      shell: . ./bin/activate && cd django_selfblog/selfblog && ./init_database.sh chdir=~/demos
+    - name: run manage.py
+      shell: . ./bin/activate && cd django_selfblog/selfblog &&  ./run.sh chdir=~/demos
