@@ -1,6 +1,7 @@
 #coding:utf-8
 from django.contrib import admin
 from django.contrib.markup.templatetags.markup import restructuredtext
+from django.core import urlresolvers
 
 from .models import Post
 from .models import Category
@@ -17,10 +18,11 @@ class PostAdmin(admin.ModelAdmin):
     save_on_top = True
 
     def preview(self, obj):
+        url_edit = urlresolvers.reverse('admin:blog_post_change', args=(obj.id,))
         return u'''
                     <span><a href="/%s.html" target="_blank">预览</a></span>
-                    <span><a href="/admin/blog/post/%s/" target="_blank">编辑</a></span>
-                ''' % (obj.alias, obj.id)
+                    <span><a href="%s" target="_blank">编辑</a></span>
+                ''' % (obj.alias, url_edit)
 
     preview.short_description = u'操作'
     preview.allow_tags = True
