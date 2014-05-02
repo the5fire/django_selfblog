@@ -4,6 +4,10 @@ the5fire的技术博客源码
 
 博客地址: http://the5fire.com
 
+微信号:
+
+.. image:: http://the5fireblog.b0.upaiyun.com/staticfile/getqrcode.jpeg
+
 概述
 -------------------------------
 本博客系统基于Django1.5.1开发而成，通过gunicorn运行于Webfaction上，Python版本为2.7.4, 更多描述看这里：
@@ -17,6 +21,10 @@ the5fire的技术博客源码
 4. 集成多说的评论
 5. RSS和rpc
 6. 其他的自己看把，博客上能看到的功能代码都在这里了
+
+2014-05-02添加
+--------------------------------
+微信自动回复接口
 
 
 哪些技术
