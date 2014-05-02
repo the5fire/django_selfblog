@@ -245,3 +245,7 @@ FIVE_MIN = 5 * 60
 
 DUOSHUO_SECRET = 'xxxxxxxxxxxxxxxxxxxxxxxxx'
 DUOSHUO_SHORT_NAME = 'xxxxxxxx'
+
+# 微信
+WEIXIN_APPID = 0
+WEIXIN_APPSECRET = ''
