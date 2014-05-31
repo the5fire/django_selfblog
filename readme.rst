@@ -107,3 +107,8 @@ the5fire的技术博客源码
 来个截图看看:
 
 .. image:: img/quick-glance.png
+
+
+更新后xadmin的后台图:
+
+.. image:: img/xadmin-screen.png
