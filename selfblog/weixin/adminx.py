@@ -5,16 +5,16 @@ import json
 import urllib2
 
 import requests
-from django.contrib import admin
+import xadmin
 from django.conf import settings
 
 from .models import Menu, ResponseMessage, Message, Event
 
 weixin_menu = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s'
-get_access_token = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s' % (settings.WEIXIN_APPID, settings.WEIXIN_APPSECRET)
+get_access_token = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s' % (settings.WEIXIN_APPID, settings.WEIXIN_APPSECRET)  # noqa
 
 
-class MenuAdmin(admin.ModelAdmin):
+class MenuAdmin(object):
     list_display = ('id', 'success', 'content', 'created_time')
     save_on_top = True
     access_token = None
@@ -49,17 +49,17 @@ class MenuAdmin(admin.ModelAdmin):
         self.access_token = data['access_token']
 
 
-admin.site.register(Menu, MenuAdmin)
+xadmin.site.register(Menu, MenuAdmin)
 
 
-class ResponseMessageAdmin(admin.ModelAdmin):
+class ResponseMessageAdmin(object):
     list_display = ('id', 'event', 'content', 'created_time')
     save_on_top = True
 
-admin.site.register(ResponseMessage, ResponseMessageAdmin)
+xadmin.site.register(ResponseMessage, ResponseMessageAdmin)
 
 
-class MessageAdmin(admin.ModelAdmin):
+class MessageAdmin(object):
     list_display = ('id', 'to', 'from_user', 'msg_id', 'content', 'response_content', 'created_time')
     save_on_top = True
 
@@ -70,11 +70,11 @@ class MessageAdmin(admin.ModelAdmin):
     content.allow_tags = True
 
 
-admin.site.register(Message, MessageAdmin)
+xadmin.site.register(Message, MessageAdmin)
 
 
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(object):
     list_display = ('id', 'to', 'from_user', 'event', 'body', 'created_time')
     save_on_top = True
 
-admin.site.register(Event, EventAdmin)
+xadmin.site.register(Event, EventAdmin)

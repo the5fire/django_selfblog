@@ -134,11 +134,15 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'django.contrib.markup',
     'django_xmlrpc',
+
+    'xadmin',
+    'crispy_forms',
     'pingback',
     'duoshuo',
+
     'blog',
+    'weixin',
 )
 
 # A sample logging configuration. The only tangible logging

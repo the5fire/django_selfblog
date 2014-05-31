@@ -34,7 +34,7 @@
         | 阅读 {{ post.view_times }}  次
         | 发布：{{ post.pub_time|date:"Y-m-d P" }}
         {% if user.is_authenticated %}
-            <a href="{% url 'admin:blog_post_change' post.id %}" target="_blank">edit</a>
+            <a href="{% url 'xadmin:blog_post_change' post.id %}" target="_blank">edit</a>
         {% endif %}
     </div>
 
