@@ -1,5 +1,6 @@
 #coding:utf-8
 import xadmin
+from django.core import urlresolvers
 
 from .models import Post
 from .models import Category
@@ -20,10 +21,11 @@ class PostAdmin(object):
     save_on_top = True
 
     def preview(self, obj):
+        url_edit = urlresolvers.reverse('xadmin:blog_post_change', args=(obj.id,))
         return u'''
-                <span><a href="/%s.html" target="_blank">预览</a></span>
-                <span><a href="/xadmin/blog/post/%s/update/" target="_blank">编辑</a></span>
-                ''' % (obj.alias, obj.id)
+                    <span><a href="/%s.html" target="_blank">预览</a></span>
+                    <span><a href="%s" target="_blank">编辑</a></span>
+                ''' % (obj.alias, url_edit)
 
     preview.short_description = u'操作'
     preview.allow_tags = True
