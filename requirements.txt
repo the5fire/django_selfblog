@@ -10,3 +10,4 @@ Pygments
 mysql-python
 python-memcached
 django-debug-toolbar
+django-xadmin
