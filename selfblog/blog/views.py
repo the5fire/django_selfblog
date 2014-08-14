@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView
 from django.shortcuts import render
+from ipware.ip import get_real_ip
 
 from selfblog.settings import PAGE_NUM, RECENTLY_NUM, HOT_NUM, FIF_MIN
 from .models import Post, Category, Page, Widget
@@ -16,7 +17,11 @@ logger = logging.getLogger(__name__)
 class BaseMixin(object):
 
     def get_context_data(self, *args, **kwargs):
-        context = super(BaseMixin, self).get_context_data(**kwargs)
+        if 'object' in kwargs or 'query' in kwargs:
+            context = super(BaseMixin, self).get_context_data(**kwargs)
+        else:
+            context = {}
+
         try:
             context['categories'] = Category.available_list()
             context['widgets'] = Widget.available_list()
@@ -108,32 +113,34 @@ class PostDetailView(BaseMixin, DetailView):
     slug_field = 'alias'
 
     def get(self, request, *args, **kwargs):
-        if 'HTTP_X_FORWARDED_FOR' in request.META:
-            ip = request.META['HTTP_X_FORWARDED_FOR']
-        else:
-            ip = request.META['REMOTE_ADDR']
+        ip = get_real_ip
         self.cur_user_ip = ip
 
         alias = self.kwargs.get('slug')
-        visited_ips = cache.get(alias, [])
+        alias = alias.replace(' ', '')
+        try:
+            self.object = self.queryset.get(alias=alias)
+        except Post.DoesNotExist:
+            referer = request.META.get('HTTP_REFERER')
+            logger.error(u'ref[%s] [%s]访问不存在的文章：[%s]', referer, ip, alias)
+            context = super(PostDetailView, self).get_context_data(**kwargs)
+            return render(request, '404.html', context)
+
+        visited_ips = cache.get(self.object.id, [])
 
         if ip not in visited_ips:
-            try:
-                post = self.queryset.get(alias=alias)
-            except Post.DoesNotExist:
-                logger.error(u'访问不存在的文章：[%s]' % alias)
-                context = super(PostDetailView, self).get_context_data(**kwargs)
-                return render(request, '404.html', context)
-            else:
-                post.view_times += 1
-                post.save()
-                visited_ips.append(ip)
+            self.object.view_times += 1
+            self.object.save()
 
-                self.set_lru_read(ip, post)
+            visited_ips.append(ip)
 
-            cache.set(alias, visited_ips, FIF_MIN)
+            self.set_lru_read(ip, self.object)
 
-        return super(PostDetailView, self).get(request, *args, **kwargs)
+            DAY = 24 * 60  # 一天
+            cache.set(self.object.id, visited_ips, DAY)
+
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
     def set_lru_read(self, ip, post):
         #保存别人正在读

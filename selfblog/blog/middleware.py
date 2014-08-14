@@ -2,6 +2,8 @@
 import time
 import logging
 
+from ipware.ip import get_real_ip
+
 from utils.cache import cache
 
 logger = logging.getLogger(__name__)
@@ -15,19 +17,16 @@ class OnlineMiddleware(object):
         """
         处理当前在线人数
         """
-        http_user_agent = request.META.get('HTTP_USER_AGENT')
+        http_user_agent = request.META.get('HTTP_USER_AGENT', [])
         if 'Spider' in http_user_agent or 'spider' in http_user_agent:
             return
-
-        if 'HTTP_X_FORWARDED_FOR' in request.META:
-            ip = request.META['HTTP_X_FORWARDED_FOR']
-        else:
-            ip = request.META['REMOTE_ADDR']
 
         online_ips = cache.get("online_ips", [])
 
         if online_ips:
             online_ips = cache.get_many(online_ips).keys()
+
+        ip = get_real_ip(request)
 
         cache.set(ip, 0, 5 * 60)
 

@@ -11,3 +11,4 @@ MySQL-python==1.2.4
 python-memcached==1.53
 django-debug-toolbar==0.10.2
 django-xadmin==0.5.0
+django-ipware
