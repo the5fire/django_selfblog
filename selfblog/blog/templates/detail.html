@@ -77,15 +77,15 @@
 
     <div class="box">
         【上一篇】
-        {% if prev_post %}
-            <a href="{{ prev_post.get_absolute_url }}">{{ prev_post.title }}</a>
+        {% if post.prev_post %}
+            <a href="{{ post.prev_post.get_absolute_url }}">{{ post.prev_post.title }}</a>
         {% else %}
             没有了
         {% endif %}
         <br/>
         【下一篇】
-        {% if next_post %}
-            <a href="{{ next_post.get_absolute_url }}">{{ next_post.title }}</a>
+        {% if post.next_post %}
+            <a href="{{ post.next_post.get_absolute_url }}">{{ post.next_post.title }}</a>
         {% else %}
             没有了
         {% endif %}

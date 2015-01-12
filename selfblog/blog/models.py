@@ -1,8 +1,9 @@
-#coding:utf-8
+# coding:utf-8
 from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.functional import cached_property
 
 from selfblog import settings
 from utils.cache import cache_decorator
@@ -76,6 +77,16 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return '%s/%s.html' % (settings.DOMAIN, self.alias)
+
+    @cached_property
+    def next_post(self):
+        # 下一篇
+        return Post.objects.filter(id__gt=self.id, status=0).order_by('id').first()
+
+    @cached_property
+    def prev_post(self):
+        # 前一篇
+        return Post.objects.filter(id__lt=self.id, status=0).first()
 
     @classmethod
     @cache_decorator(1*60)

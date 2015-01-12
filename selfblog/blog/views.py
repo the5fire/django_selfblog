@@ -1,7 +1,8 @@
-#coding:utf-8
+# coding:utf-8
 import logging
 
 from django.db.models import Q
+from django.db.models import F
 from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView
 from django.shortcuts import render
@@ -129,8 +130,7 @@ class PostDetailView(BaseMixin, DetailView):
         visited_ips = cache.get(self.object.id, [])
 
         if ip not in visited_ips:
-            self.object.view_times += 1
-            self.object.save()
+            Post.objects.filter(id=self.object.id).update(view_times=F('view_times')+1)
 
             visited_ips.append(ip)
 
@@ -143,7 +143,7 @@ class PostDetailView(BaseMixin, DetailView):
         return self.render_to_response(context)
 
     def set_lru_read(self, ip, post):
-        #保存别人正在读
+        # 保存别人正在读
         lru_views = cache.get('lru_views')
         if not lru_views:
             lru_views = LRUCacheDict(max_size=10, expiration=FIF_MIN)
@@ -155,27 +155,11 @@ class PostDetailView(BaseMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PostDetailView, self).get_context_data(**kwargs)
-        post = self.get_object()
-        next_id = post.id + 1
-        prev_id = post.id - 1
-
-        try:
-            next_post = self.queryset.get(id=next_id)
-        except Post.DoesNotExist:
-            next_post = None
-
-        try:
-            prev_post = self.queryset.get(id=prev_id)
-        except Post.DoesNotExist:
-            prev_post = None
-
-        context['next_post'] = next_post
-        context['prev_post'] = prev_post
 
         context['lru_views'] = cache.get('lru_views', {}).items()
         context['cur_user_ip'] = self.cur_user_ip
 
-        context['related_posts'] = post.related_posts
+        context['related_posts'] = self.object.related_posts
 
         return context
 
