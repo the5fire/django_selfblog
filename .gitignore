@@ -9,3 +9,4 @@ atlassian-ide-plugin.xml
 .env
 *.log
 *.sqlite3
+.ropeproject/

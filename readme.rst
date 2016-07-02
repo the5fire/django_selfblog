@@ -31,6 +31,13 @@ the5fire的技术博客源码
 -------------------------------
 后台修改为xadmin（0.5v）
 
+2016-07-02
+-------------------------------
+* Post增加is_md字段，增加对markdown格式的支持
+* 拆分settings.py文件为develop.py,product.py让配置更清晰
+* 通过DJANGOSELFBLOG_PROFILE来加载对应的配置develop/product
+* 修复创建Post时不填英文标题导致的文章无法访问的bug
+
 
 哪些技术
 ------------------------------

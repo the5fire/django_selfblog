@@ -1,4 +1,5 @@
-#coding:utf-8
+# coding:utf-8
+import markdown
 import xadmin
 from django.core import urlresolvers
 
@@ -35,7 +36,10 @@ class PostAdmin(object):
         obj.author = self.request.user
         if not obj.summary:
             obj.summary = obj.content
-        if not obj.is_old:
+
+        if obj.is_md:
+            obj.content_html = markdown.markdown(obj.content, extensions=['codehilite'])
+        elif not obj.is_old:
             obj.content_html = restructuredtext(obj.content)
         else:
             obj.content_html = obj.content.replace('\r\n', '<br/>')
