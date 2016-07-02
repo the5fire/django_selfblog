@@ -1,11 +1,13 @@
 # coding:utf-8
 from datetime import datetime
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
+from django.db.models import signals
+from django.dispatch import receiver
 from django.utils.functional import cached_property
 
-from selfblog import settings
+from django.conf import settings
 from utils.cache import cache_decorator
 
 STATUS = {
@@ -55,7 +57,7 @@ class Post(models.Model):
     is_top = models.BooleanField(default=False, verbose_name=u'置顶')
 
     summary = models.TextField(verbose_name=u'摘要')
-    content = models.TextField(verbose_name=u'文章正文rst格式')
+    content = models.TextField(verbose_name=u'文章正文rst/md格式')
 
     content_html = models.TextField(verbose_name=u'文章正文html')
     view_times = models.IntegerField(default=1)
@@ -63,6 +65,7 @@ class Post(models.Model):
     tags = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'标签', help_text=u'用英文逗号分割')
     status = models.IntegerField(default=0, choices=STATUS.items(), verbose_name=u'状态')
 
+    is_md = models.BooleanField(default=False, verbose_name=u'是否为Markdown格式')
     is_old = models.BooleanField(default=False, verbose_name=u'是否为旧数据')
     pub_time = models.DateTimeField(default=datetime.now, verbose_name=u'发布时间')
 
@@ -120,6 +123,14 @@ class Post(models.Model):
     class Meta:
         ordering = ['-is_top', '-pub_time', '-create_time']
         verbose_name_plural = verbose_name = u"文章"
+
+
+@receiver(signals.post_save, sender=Post)
+def check_or_update_post_alias(sender, instance=None, **kwargs):
+    # 如果alias未设置则使用id
+    if not instance.alias:
+        instance.alias = instance.id
+        instance.save()
 
 
 class Page(models.Model):

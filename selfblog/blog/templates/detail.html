@@ -6,12 +6,11 @@
 {% block keywords %}{{ post.tags }}{% endblock %}
 
 {% block extend_style %} 
+{% if post.is_md %}
+<link href="/static/blog/css/codehilite.css" rel="stylesheet" type="text/css" media="screen" />
+{% else %}
 <link href="/static/blog/css/code.css" rel="stylesheet" type="text/css" media="screen" />
-<script src="/static/blog/js/jquery-1.8.1.min.js"></script>
-<script src="/static/bootstrap/js/bootstrap-dropdown.js"></script>
-<script>
-    $('.dropdown-toggle').dropdown()
-</script>
+{% endif %}
 {% endblock %}
 
 {% block main %}
@@ -99,3 +98,12 @@
     {% include "pingback.html" %}
 </div>
 {% endblock %}
+
+{%  block extend_js %}
+<script src="/static/blog/js/jquery-1.8.1.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap-dropdown.js"></script>
+<script>
+$('.dropdown-toggle').dropdown()
+</script>
+{% endblock %}
+

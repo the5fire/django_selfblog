@@ -1,12 +1,6 @@
-#coding:utf-8
-# Django settings for selfblog project.
+# coding:utf-8
+import os
 from os import path
-from platform import platform
-if 'centos' in platform():
-    DEBUG = False
-else:
-    DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ROOT_PATH = path.abspath(path.join(path.dirname('settings.py'), path.pardir))
 
@@ -16,67 +10,15 @@ ADMINS = (
 ALLOWED_HOSTS = ['localhost', '.the5fire.com']
 
 MANAGERS = ADMINS
-
-if DEBUG:
-    DOMAIN = 'http://localhost:8000'
-    DB_NAME = 'selfblog.sqlite3'
-    DB_USER = 'root'
-    DB_PWD = 'root'
-else:
-    DOMAIN = 'http://www.the5fire.com'
-    DB_NAME = 'mydb'
-    DB_USER = 'the5fire'
-    DB_PWD = 'the5fire'
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': DB_NAME,                      # Or path to database file if using sqlite3.
-        'USER': DB_USER,                      # Not used with sqlite3.
-        'PASSWORD': DB_PWD,                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
-
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# On Unix systems, a value of None will cause Django to use the same
-# timezone as the operating system.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
 TIME_ZONE = 'Asia/Shanghai'
-
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'zh-cn'
-
 SITE_ID = 1
-
-# If you set this to False, Django will make some optimizations so as not
-# to load the internationalization machinery.
 USE_I18N = True
-
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale
 USE_L10N = True
 
 MEDIA_ROOT = ''
-
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
-# Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
-
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/home/media/media.lawrence.com/static/"
-#STATIC_ROOT = ''
-
-# URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
+# STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 # Additional locations of static files
@@ -89,7 +31,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    #'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -99,7 +41,7 @@ SECRET_KEY = 'm_t&=vit))7cic$zfdl^7wfsc+$e1@_p=4@bmc54pp%25n#*%1'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-    #'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -145,22 +87,11 @@ INSTALLED_APPS = (
     'weixin',
 )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-if DEBUG:
-    INSTALLED_APPS = INSTALLED_APPS + ('debug_toolbar', )
-    MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('debug_toolbar.middleware.DebugToolbarMiddleware', )
-    LOG_FILE = '/tmp/blog.log'
-else:
-    LOG_FILE = '/home/the5fire/virtualenvs/bloga/logs/all.log'
 
+LOG_PATH = os.path.join(ROOT_PATH, '..', '..')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
-
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -176,20 +107,18 @@ LOGGING = {
     },
 
     'handlers': {
-        'null': {
-            'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
-        },
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
-        'file': {
+        'file_info': {
             'level': 'INFO',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': LOG_FILE,
+            'filename': os.path.join(LOG_PATH, 'info.log'),
+            'maxBytes': 1024 * 1024 * 100,
+            'backupCount': 10,
             'mode': 'a',
         },
         'mail_admins': {
@@ -200,12 +129,12 @@ LOGGING = {
     },
     'loggers': {
         '': {
-            'handlers': ['file', 'console'],
+            'handlers': ['file_info', 'console'],
             'level': 'INFO',
             'propagate': True,
         },
         'django': {
-            'handlers': ['file', 'console'],
+            'handlers': ['file_info', 'console'],
             'level': 'DEBUG',
             'propagate': True,
         },
@@ -216,7 +145,6 @@ LOGGING = {
         },
     }
 }
-
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -235,7 +163,7 @@ CACHES = {
 }
 
 
-#配置文章开头使用rst格式无显示的问题
+# 配置文章开头使用rst格式无显示的问题
 RESTRUCTUREDTEXT_FILTER_SETTINGS = {
     'doctitle_xform': False,
 }
