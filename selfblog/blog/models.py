@@ -46,6 +46,7 @@ class Category(models.Model):
     class Meta:
         ordering = ['rank', '-create_time']
         verbose_name_plural = verbose_name = u"分类"
+        app_label = u'博客'
 
 
 class Post(models.Model):
@@ -123,6 +124,7 @@ class Post(models.Model):
     class Meta:
         ordering = ['-is_top', '-pub_time', '-create_time']
         verbose_name_plural = verbose_name = u"文章"
+        app_label = u'博客'
 
 
 @receiver(signals.post_save, sender=Post)
@@ -157,6 +159,7 @@ class Page(models.Model):
     class Meta:
         ordering = ['-rank', '-create_time']
         verbose_name_plural = verbose_name = u"页面"
+        app_label = u'博客'
 
 
 class Widget(models.Model):
@@ -181,3 +184,4 @@ class Widget(models.Model):
     class Meta:
         ordering = ['rank', '-create_time']
         verbose_name_plural = verbose_name = u"侧栏组件"
+        app_label = u'博客'

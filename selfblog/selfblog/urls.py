@@ -1,4 +1,4 @@
-#coding:utf-8
+# coding:utf-8
 from django.conf.urls import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.sitemaps import views as sitemap_views
@@ -11,10 +11,11 @@ from blog.views import (IndexView, CategoryListView, TagsListView,
                         PostDetailView, PageDetailView)
 from feeds import LatestEntriesFeed
 from sitemap import PostSitemap
+import adminx  # noqa 初始化adminx配置
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^$', IndexView.as_view(), name='home'),
-
     url(r'^feed|rss/$', LatestEntriesFeed()),
     url(r'^sitemap\.xml$', cache_page(60 * 60 * 12)(sitemap_views.sitemap), {'sitemaps': {'posts': PostSitemap}}),
 
@@ -25,7 +26,7 @@ urlpatterns = patterns('',
 
     url(r'^xmlrpc/$', 'django_xmlrpc.views.handle_xmlrpc', {}, 'xmlrpc'),
 
-    #放到最后
+    # 放到最后
     url(r'^(?P<slug>[\w|\-|\d|\W]+?).html$', PostDetailView.as_view()),
     url(r'^(?P<slug>\w+)/$', PageDetailView.as_view()),
 )
